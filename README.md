@@ -57,7 +57,9 @@ docker compose down
 
 Пользователь лаборатории:
 
-- Login: `lab_user`
+- Login: `lab_user1`
+- Password: `password123`
+- Login: `lab_user2`
 - Password: `password123`
 
 Тестовые аккаунты предназначены только для локальной разработки.
