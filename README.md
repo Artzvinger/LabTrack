@@ -55,7 +55,7 @@ docker compose down
 - Login: `admin`
 - Password: `password123`
 
-Пользователь лаборатории:
+Пользователи лаборатории:
 
 - Login: `lab_user1`
 - Password: `password123`
