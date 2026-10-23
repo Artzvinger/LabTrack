@@ -8,6 +8,7 @@ import {
 import RequireAuth from '../auth/RequireAuth';
 
 import LoginPage from '../pages/LoginPage';
+import ProfilePage from '../pages/ProfilePage';
 import SamplesPage from '../pages/SamplesPage';
 import SampleDetailsPage from '../pages/SampleDetailsPage';
 
@@ -21,6 +22,7 @@ type AppRouterProviderProps = {
         password: string,
     ) => Promise<void>;
     onLogout: () => Promise<void>;
+    onUserChange: (user: User) => void;
     onSessionExpired: () => void;
 };
 
@@ -29,6 +31,7 @@ function AppRouterProvider({
                                error,
                                onLogin,
                                onLogout,
+                               onUserChange,
                                onSessionExpired,
                            }: AppRouterProviderProps) {
     return (
@@ -70,7 +73,27 @@ function AppRouterProvider({
                     <Route
                         path="/samples/:id"
                         element={
-                            <SampleDetailsPage />
+                            <SampleDetailsPage
+                                onSessionExpired={
+                                    onSessionExpired
+                                }
+                            />
+                        }
+                    />
+
+                    <Route
+                        path="/profile"
+                        element={
+                            <ProfilePage
+                                user={user!}
+                                onUserChange={
+                                    onUserChange
+                                }
+                                onLogout={onLogout}
+                                onSessionExpired={
+                                    onSessionExpired
+                                }
+                            />
                         }
                     />
                 </Route>

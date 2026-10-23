@@ -1,0 +1,50 @@
+/* Токены темы: цвета, типографика, радиусы, шкала отступов. */
+
+:root {
+    /* Поверхности */
+    --bg: #12151a;
+    --surface: #171b21;
+    --surface-raised: #1b2028;
+    --surface-hover: #1e242c;
+    --surface-active: #232a34;
+
+    /* Границы */
+    --border: #262c35;
+    --border-strong: #323a45;
+    --border-hover: #3d4855;
+
+    /* Текст */
+    --text: #e6e9ee;
+    --text-muted: #98a2b0;
+    --text-dim: #7f8b99;
+
+    /* Единственный акцент: приглушённый стальной */
+    --accent: #7aa2b8;
+    --accent-soft: rgba(122, 162, 184, 0.16);
+
+    /* Ошибки */
+    --danger-bg: #2a1c1e;
+    --danger-border: #472a2d;
+    --danger-text: #e0a3a3;
+
+    /* Типографика */
+    --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Arial,
+        sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+    /* Радиусы */
+    --radius-sm: 3px;
+    --radius-md: 4px;
+
+    /* Шкала отступов 4 / 8 / 12 / 16 / 24 / 32 */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+
+    /* Прочее */
+    --control-height: 36px;
+    --transition: 140ms ease;
+}

@@ -3,6 +3,10 @@ export type User = {
     username: string;
     role: string;
     laboratoryId: number | null;
+    laboratoryName: string | null;
+    fullName: string | null;
+    email: string | null;
+    createdAt: string;
 };
 
 export type SampleStatus =
@@ -10,12 +14,18 @@ export type SampleStatus =
     | 'processing'
     | 'completed';
 
+export type StatusCounts = Record<SampleStatus, number>;
+
 export type Sample = {
     id: number;
+    code: string;
     patientName: string;
+    anamnesis: string | null;
+    conclusion: string | null;
     status: SampleStatus;
     receivedAt: string;
     laboratoryId: number;
+    laboratoryName: string | null;
     createdAt: string;
 };
 
@@ -24,4 +34,5 @@ export type SamplesResponse = {
     total: number;
     page: number;
     limit: number;
+    counts: StatusCounts;
 };

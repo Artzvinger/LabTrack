@@ -1,0 +1,44 @@
+/* Базовый слой: тёмная схема, reset, типографика, выделение. */
+
+:root {
+    /* Нативные select, скроллбары и контролы сразу тёмные */
+    color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--text);
+}
+
+p {
+    margin: 0 0 var(--space-3);
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--text-muted);
+}
+
+::selection {
+    background: rgba(122, 162, 184, 0.3);
+    color: var(--text);
+}

@@ -5,15 +5,17 @@ import {
 
 import type {
     Sample,
+    SampleStatus,
     SamplesResponse,
 } from '../types/sample';
 
-const API_URL = 'http://localhost:3000/api';
+import { API_URL } from './base';
 
 type GetSamplesParams = {
     page: number;
     limit: number;
     status: string;
+    search: string;
     sort: string;
     order: string;
 };
@@ -32,6 +34,13 @@ export async function getSamples(
         searchParams.set(
             'status',
             params.status,
+        );
+    }
+
+    if (params.search) {
+        searchParams.set(
+            'search',
+            params.search,
         );
     }
 
@@ -61,6 +70,52 @@ export async function getSamples(
     if (!result.success) {
         throw new Error(
             'Сервер вернул некорректные данные образцов',
+        );
+    }
+
+    return result.data;
+}
+
+type SamplePatch = {
+    status?: SampleStatus;
+    anamnesis?: string | null;
+    conclusion?: string | null;
+};
+
+export async function patchSample(
+    id: number,
+    patch: SamplePatch,
+): Promise<Sample> {
+    const response = await fetch(
+        `${API_URL}/samples/${id}`,
+        {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(patch),
+        },
+    );
+
+    const data = await response.json();
+
+    if (response.status === 401) {
+        throw new Error('SESSION_EXPIRED');
+    }
+
+    if (!response.ok) {
+        throw new Error(
+            data.message ||
+                'Не удалось изменить статус',
+        );
+    }
+
+    const result = sampleSchema.safeParse(data);
+
+    if (!result.success) {
+        throw new Error(
+            'Сервер вернул некорректные данные образца',
         );
     }
 

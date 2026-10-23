@@ -1,9 +1,18 @@
 import type { ChangeEvent } from 'react';
 
+import {
+    statusLabels,
+    statuses,
+} from '../lib/status';
+
 type SamplesFiltersProps = {
+    search: string;
     status: string;
     sort: string;
     order: string;
+    onSearchChange: (
+        event: ChangeEvent<HTMLInputElement>,
+    ) => void;
     onStatusChange: (
         event: ChangeEvent<HTMLSelectElement>,
     ) => void;
@@ -16,9 +25,11 @@ type SamplesFiltersProps = {
 };
 
 function SamplesFilters({
+                            search,
                             status,
                             sort,
                             order,
+                            onSearchChange,
                             onStatusChange,
                             onSortChange,
                             onOrderChange,
@@ -26,7 +37,19 @@ function SamplesFilters({
     return (
         <div className="filters">
             <label>
+                Поиск:{' '}
+
+                <input
+                    type="search"
+                    value={search}
+                    placeholder="Фамилия или номер"
+                    onChange={onSearchChange}
+                />
+            </label>
+
+            <label>
                 Статус:{' '}
+
                 <select
                     value={status}
                     onChange={onStatusChange}
@@ -35,22 +58,20 @@ function SamplesFilters({
                         Все
                     </option>
 
-                    <option value="received">
-                        Получен
-                    </option>
-
-                    <option value="processing">
-                        В обработке
-                    </option>
-
-                    <option value="completed">
-                        Завершён
-                    </option>
+                    {statuses.map((value) => (
+                        <option
+                            key={value}
+                            value={value}
+                        >
+                            {statusLabels[value]}
+                        </option>
+                    ))}
                 </select>
             </label>
 
             <label>
                 Сортировка:{' '}
+
                 <select
                     value={sort}
                     onChange={onSortChange}
@@ -67,6 +88,7 @@ function SamplesFilters({
 
             <label>
                 Порядок:{' '}
+
                 <select
                     value={order}
                     onChange={onOrderChange}

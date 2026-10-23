@@ -1,5 +1,3 @@
-import './App.css';
-
 import {
     useCallback,
     useEffect,
@@ -15,6 +13,20 @@ import {
 import AppRouterProvider from './providers/AppRouterProvider';
 
 import type { User } from './types/sample';
+
+// fetch падает с TypeError, когда сервер недоступен или запрос заблокирован CORS
+function toErrorMessage(
+    error: unknown,
+    fallback: string,
+): string {
+    if (error instanceof TypeError) {
+        return 'Не удалось связаться с сервером. Проверьте, что backend запущен.';
+    }
+
+    return error instanceof Error
+        ? error.message
+        : fallback;
+}
 
 function App() {
     const [user, setUser] =
@@ -33,9 +45,10 @@ function App() {
             })
             .catch((error) => {
                 setError(
-                    error instanceof Error
-                        ? error.message
-                        : 'Не удалось подключиться к серверу',
+                    toErrorMessage(
+                        error,
+                        'Не удалось подключиться к серверу',
+                    ),
                 );
             })
             .finally(() => {
@@ -59,9 +72,7 @@ function App() {
                 setError('');
             } catch (error) {
                 setError(
-                    error instanceof Error
-                        ? error.message
-                        : 'Ошибка входа',
+                    toErrorMessage(error, 'Ошибка входа'),
                 );
             }
         },
@@ -87,6 +98,15 @@ function App() {
             );
         }, []);
 
+    // После правки профиля обновляем пользователя во всём приложении
+    const handleUserChange = useCallback(
+        (nextUser: User) => {
+            setUser(nextUser);
+            setError('');
+        },
+        [],
+    );
+
     if (loading) {
         return (
             <div className="page">
@@ -101,6 +121,7 @@ function App() {
             error={error}
             onLogin={handleLogin}
             onLogout={handleLogout}
+            onUserChange={handleUserChange}
             onSessionExpired={
                 handleSessionExpired
             }

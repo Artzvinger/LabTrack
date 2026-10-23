@@ -1,0 +1,25 @@
+/* Пагинация под таблицей. */
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: var(--space-4) 0 0;
+}
+
+.pagination button {
+    min-height: 32px;
+    padding: 0 var(--space-3);
+}
+
+.pagination span {
+    padding: 0 var(--space-1);
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Итоговая строка сразу под пагинацией */
+.pagination + p {
+    margin-top: var(--space-3);
+    font-size: 12px;
+}

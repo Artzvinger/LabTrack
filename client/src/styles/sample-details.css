@@ -1,0 +1,152 @@
+/* Карточка образца: пары «ключ — значение». */
+
+.sample-details {
+    max-width: 640px;
+    padding: var(--space-4);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+}
+
+.sample-details p {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin: 0 0 var(--space-2);
+    font-size: 14px;
+    color: var(--text);
+}
+
+.sample-details p:last-of-type {
+    margin-bottom: 0;
+}
+
+.sample-details strong {
+    display: inline-block;
+    flex: 0 0 auto;
+    min-width: 150px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.sample-details-code {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* Заметки врача: анамнез и заключение */
+.sample-notes {
+    margin: var(--space-4) 0 0;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border);
+}
+
+.sample-notes h2 {
+    margin: 0 0 var(--space-3);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.sample-notes-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: var(--space-3);
+}
+
+.sample-notes-field label {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.sample-notes textarea {
+    width: 100%;
+    min-height: 84px;
+    padding: var(--space-2) var(--space-3);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--text);
+    background: var(--surface-raised);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    resize: vertical;
+    transition: border-color var(--transition);
+}
+
+.sample-notes textarea:hover {
+    border-color: var(--border-hover);
+}
+
+.sample-notes textarea:focus {
+    border-color: var(--accent);
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
+.sample-notes textarea::placeholder {
+    color: var(--text-dim);
+}
+
+.sample-notes-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+/* Переключение статуса */
+.status-switch {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin: var(--space-3) 0 0;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+}
+
+.status-switch-label {
+    color: var(--text-muted);
+}
+
+.status-switch-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+}
+
+.status-switch button {
+    min-height: 30px;
+    padding: 0 var(--space-2);
+    font-size: 12px;
+}
+
+.status-switch button.is-active {
+    color: var(--text);
+    background: var(--accent-soft);
+    border-color: var(--accent);
+}
+
+.sample-details > button {
+    margin-top: var(--space-4);
+}
+
+@media (max-width: 720px) {
+    .sample-details {
+        padding: var(--space-3);
+    }
+
+    .sample-details p {
+        flex-wrap: wrap;
+        gap: var(--space-1) var(--space-2);
+    }
+
+    .sample-details strong {
+        min-width: 132px;
+    }
+}

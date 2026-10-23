@@ -1,3 +1,6 @@
+import { formatDateTime } from '../lib/format';
+import { statusLabels } from '../lib/status';
+
 import type { Sample } from '../types/sample';
 
 type SamplesTableProps = {
@@ -10,14 +13,19 @@ function SamplesTable({
     onSampleClick,
 }: SamplesTableProps) {
     if (samples.length === 0) {
-        return <p>Образцы не найдены.</p>;
+        return (
+            <p>
+                Ничего не найдено. Измените
+                поиск или фильтры.
+            </p>
+        );
     }
 
     return (
         <table className="samples-table">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Номер</th>
                     <th>Пациент</th>
                     <th>Статус</th>
                     <th>Дата получения</th>
@@ -35,20 +43,33 @@ function SamplesTable({
                             )
                         }
                     >
-                        <td>{sample.id}</td>
+                        <td>{sample.code}</td>
+
                         <td>
                             {sample.patientName}
                         </td>
-                        <td>{sample.status}</td>
+
                         <td>
-                            {new Date(
+                            <span
+                                className={`status status-${sample.status}`}
+                            >
+                                {
+                                    statusLabels[
+                                        sample.status
+                                    ]
+                                }
+                            </span>
+                        </td>
+
+                        <td>
+                            {formatDateTime(
                                 sample.receivedAt,
-                            ).toLocaleString(
-                                'ru-RU',
                             )}
                         </td>
+
                         <td>
-                            {sample.laboratoryId}
+                            {sample.laboratoryName ??
+                                '—'}
                         </td>
                     </tr>
                 ))}

@@ -1,0 +1,17 @@
+/* Сообщения об ошибках: страницы и поля формы. */
+
+.error {
+    margin: 0 0 var(--space-4);
+    padding: var(--space-2) var(--space-3);
+    line-height: 1.45;
+    color: var(--danger-text);
+    background: var(--danger-bg);
+    border: 1px solid var(--danger-border);
+    border-radius: var(--radius-md);
+}
+
+.form-field .error {
+    margin: var(--space-1) 0 0;
+    padding: 6px var(--space-2);
+    font-size: 12px;
+}

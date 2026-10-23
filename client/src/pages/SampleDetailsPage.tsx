@@ -10,13 +10,28 @@ import {
 
 import {
     getSample,
+    patchSample,
 } from '../api/samples';
 
 import SampleDetails from '../components/SampleDetails';
 
-import type { Sample } from '../types/sample';
+import type {
+    Sample,
+    SampleStatus,
+} from '../types/sample';
 
-function SampleDetailsPage() {
+type SaveNotesInput = {
+    anamnesis: string | null;
+    conclusion: string | null;
+};
+
+type SampleDetailsPageProps = {
+    onSessionExpired: () => void;
+};
+
+function SampleDetailsPage({
+                               onSessionExpired,
+                           }: SampleDetailsPageProps) {
     const { id } = useParams();
 
     const navigate = useNavigate();
@@ -28,6 +43,12 @@ function SampleDetailsPage() {
         useState(true);
 
     const [error, setError] =
+        useState('');
+
+    const [statusSaving, setStatusSaving] =
+        useState(false);
+
+    const [statusError, setStatusError] =
         useState('');
 
     useEffect(() => {
@@ -68,9 +89,9 @@ function SampleDetailsPage() {
                     error.message ===
                         'SESSION_EXPIRED'
                 ) {
-                    navigate('/login', {
-                        replace: true,
-                    });
+                    // Сбрасываем пользователя в App,
+                    // иначе LoginPage вернёт его обратно на /samples
+                    onSessionExpired();
                     return;
                 }
 
@@ -85,7 +106,75 @@ function SampleDetailsPage() {
         }
 
         loadSample();
-    }, [id, navigate]);
+    }, [id, onSessionExpired]);
+
+    async function handleStatusChange(
+        status: SampleStatus,
+    ) {
+        if (!sample || sample.status === status) {
+            return;
+        }
+
+        setStatusSaving(true);
+        setStatusError('');
+
+        try {
+            const updated = await patchSample(
+                sample.id,
+                { status },
+            );
+
+            setSample(updated);
+        } catch (statusUpdateError) {
+            if (
+                statusUpdateError instanceof Error &&
+                statusUpdateError.message ===
+                    'SESSION_EXPIRED'
+            ) {
+                onSessionExpired();
+                return;
+            }
+
+            setStatusError(
+                statusUpdateError instanceof Error
+                    ? statusUpdateError.message
+                    : 'Не удалось изменить статус',
+            );
+        } finally {
+            setStatusSaving(false);
+        }
+    }
+
+    async function handleSaveNotes(
+        input: SaveNotesInput,
+    ) {
+        if (!sample) {
+            return;
+        }
+
+        try {
+            const updated = await patchSample(
+                sample.id,
+                input,
+            );
+
+            setSample(updated);
+        } catch (notesError) {
+            if (
+                notesError instanceof Error &&
+                notesError.message ===
+                    'SESSION_EXPIRED'
+            ) {
+                onSessionExpired();
+                throw new Error(
+                    'Сессия истекла. Войдите снова.',
+                    { cause: notesError },
+                );
+            }
+
+            throw notesError;
+        }
+    }
 
     return (
         <div className="page">
@@ -121,10 +210,22 @@ function SampleDetailsPage() {
                 {sample && (
                     <SampleDetails
                         sample={sample}
+                        onSaveNotes={
+                            handleSaveNotes
+                        }
                         onBack={() =>
                             navigate(
                                 '/samples',
                             )
+                        }
+                        onStatusChange={
+                            handleStatusChange
+                        }
+                        statusSaving={
+                            statusSaving
+                        }
+                        statusError={
+                            statusError
                         }
                     />
                 )}

@@ -1,7 +1,24 @@
 import { userSchema } from '../schemas/sample';
 import type { User } from '../types/sample';
 
-const API_URL = 'http://localhost:3000/api';
+import { API_URL } from './base';
+
+import type { z } from 'zod';
+
+type UserPayload = z.infer<typeof userSchema>;
+
+export function toUser(data: UserPayload): User {
+    return {
+        id: data.id,
+        username: data.username,
+        role: data.role,
+        laboratoryId: data.laboratoryId,
+        laboratoryName: data.laboratoryName,
+        fullName: data.fullName,
+        email: data.email,
+        createdAt: data.createdAt,
+    };
+}
 
 export async function getCurrentUser(): Promise<User | null> {
     const response = await fetch(
@@ -25,13 +42,7 @@ export async function getCurrentUser(): Promise<User | null> {
         );
     }
 
-    return {
-        id: result.data.id,
-        username: result.data.username,
-        role: result.data.role,
-        laboratoryId:
-            result.data.laboratoryId ?? null,
-    };
+    return toUser(result.data);
 }
 
 export async function login(
@@ -69,13 +80,7 @@ export async function login(
         );
     }
 
-    return {
-        id: result.data.id,
-        username: result.data.username,
-        role: result.data.role,
-        laboratoryId:
-            result.data.laboratoryId ?? null,
-    };
+    return toUser(result.data);
 }
 
 export async function logout(): Promise<void> {

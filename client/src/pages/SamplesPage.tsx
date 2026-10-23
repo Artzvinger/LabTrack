@@ -4,24 +4,35 @@ import {
 } from 'react';
 
 import {
+    Link,
     useNavigate,
 } from 'react-router';
 
 import { getSamples } from '../api/samples';
 
+import { formatNumber } from '../lib/format';
+
 import Pagination from '../components/Pagination';
 import SamplesFilters from '../components/SamplesFilters';
+import SamplesStats from '../components/SamplesStats';
 import SamplesTable from '../components/SamplesTable';
 
 import type {
     User,
     Sample,
+    StatusCounts,
 } from '../types/sample';
 
 type SamplesPageProps = {
     user: User;
     onLogout: () => Promise<void>;
     onSessionExpired: () => void;
+};
+
+const EMPTY_COUNTS: StatusCounts = {
+    received: 0,
+    processing: 0,
+    completed: 0,
 };
 
 function SamplesPage({
@@ -47,6 +58,17 @@ function SamplesPage({
     const [total, setTotal] =
         useState(0);
 
+    const [counts, setCounts] =
+        useState<StatusCounts>(
+            EMPTY_COUNTS,
+        );
+
+    const [searchInput, setSearchInput] =
+        useState('');
+
+    const [search, setSearch] =
+        useState('');
+
     const [status, setStatus] =
         useState('');
 
@@ -57,6 +79,17 @@ function SamplesPage({
         useState('desc');
 
     const limit = 10;
+
+    // Ввод поиска применяем с небольшой задержкой,
+    // чтобы не дёргать API на каждую букву
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setSearch(searchInput.trim());
+            setPage(1);
+        }, 300);
+
+        return () => clearTimeout(timeout);
+    }, [searchInput]);
 
     useEffect(() => {
         async function loadSamples() {
@@ -69,6 +102,7 @@ function SamplesPage({
                         page,
                         limit,
                         status,
+                        search,
                         sort,
                         order,
                     });
@@ -79,6 +113,10 @@ function SamplesPage({
 
                 setTotal(
                     result.total,
+                );
+
+                setCounts(
+                    result.counts,
                 );
             } catch (error) {
                 if (
@@ -104,10 +142,17 @@ function SamplesPage({
     }, [
         page,
         status,
+        search,
         sort,
         order,
         onSessionExpired,
     ]);
+
+    function handleSearchChange(
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) {
+        setSearchInput(event.target.value);
+    }
 
     function handleStatusChange(
         event: React.ChangeEvent<HTMLSelectElement>,
@@ -149,24 +194,42 @@ function SamplesPage({
                         </h1>
 
                         <p>
-                            Пользователь:{' '}
-                            {user.username}
+                            {user.fullName ??
+                                user.username}
+                            {' · '}
+                            {user.laboratoryName ??
+                                'все лаборатории'}
                         </p>
                     </div>
 
-                    <button
-                        onClick={
-                            onLogout
-                        }
-                    >
-                        Выйти
-                    </button>
+                    <div className="header-actions">
+                        <Link
+                            to="/profile"
+                            className="button"
+                        >
+                            Кабинет
+                        </Link>
+
+                        <button
+                            onClick={
+                                onLogout
+                            }
+                        >
+                            Выйти
+                        </button>
+                    </div>
                 </div>
 
+                <SamplesStats counts={counts} />
+
                 <SamplesFilters
+                    search={searchInput}
                     status={status}
                     sort={sort}
                     order={order}
+                    onSearchChange={
+                        handleSearchChange
+                    }
                     onStatusChange={
                         handleStatusChange
                     }
@@ -224,8 +287,8 @@ function SamplesPage({
                 />
 
                 <p>
-                    Всего образцов:{' '}
-                    {total}
+                    Найдено:{' '}
+                    {formatNumber(total)}
                 </p>
             </div>
         </div>
