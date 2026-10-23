@@ -1,10 +1,10 @@
 services:
   postgres:
     image: postgres:16
-    container_name: mfti-task-postgres
+    container_name: labtrack-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: mfti_task
+      POSTGRES_DB: labtrack
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
@@ -12,7 +12,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d mfti_task"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d labtrack"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -20,11 +20,12 @@ services:
   backend:
     build:
       context: ./server
-    container_name: mfti-task-backend
+    container_name: labtrack-backend
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/mfti_task
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/labtrack
       SESSION_SECRET: secret
+      CLIENT_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
     ports:
       - "3000:3000"
     depends_on:
@@ -34,7 +35,7 @@ services:
   frontend:
     build:
       context: client
-    container_name: mfti-task-frontend
+    container_name: labtrack-frontend
     restart: unless-stopped
     ports:
       - "5173:4173"
