@@ -8,6 +8,41 @@
       "when": 1790803012642,
       "tag": "0000_red_lady_ursula",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792697445512,
+      "tag": "0001_flawless_morlocks",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792712552236,
+      "tag": "0002_pink_forge",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792713628419,
+      "tag": "0003_ambiguous_golden_guardian",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792714336585,
+      "tag": "0004_perpetual_energizer",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792714885787,
+      "tag": "0005_lethal_gauntlet",
+      "breakpoints": true
     }
   ]
 }
